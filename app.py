@@ -19,6 +19,7 @@ except ImportError:
 
 st.set_page_config(layout="wide")
 st.title("📊 Dynamic Data Visualization Dashboard")
+st.caption("Developed by Akshith🧑‍💻")
 
 # Initialize session state
 if 'original_df' not in st.session_state:
@@ -48,16 +49,21 @@ if 'show_dataset' not in st.session_state:
 def load_data(file):
     try:
         file.seek(0)
-        df = pd.read_csv(file)
+        if file.name.endswith('.csv'):
+            df = pd.read_csv(file)
+        elif file.name.endswith('.xlsx') or file.name.endswith('.xls'):
+            df = pd.read_excel(file)
+        else:
+            raise ValueError("Unsupported file type. Please upload a CSV or Excel file.")
         if df.empty or df.columns.size == 0:
-            raise ValueError("The uploaded CSV file is empty or has no columns.")
+            raise ValueError("The uploaded file is empty or has no columns.")
         return df
     except pd.errors.EmptyDataError:
-        raise ValueError("The uploaded CSV file is empty.")
+        raise ValueError("The uploaded file is empty.")
     except pd.errors.ParserError as e:
         raise ValueError(f"CSV parsing error: {str(e)}.")
     except Exception as e:
-        raise ValueError(f"Error reading CSV file: {str(e)}")
+        raise ValueError(f"Error reading file: {str(e)}")
 
 @st.cache_data
 def clean_data(df, fill_method='mean', custom_fill_value=None, interpolate_method=None, 
@@ -261,7 +267,7 @@ def generate_default_visualizations(df, numeric_columns, categorical_columns):
     return visualizations
 
 # File Upload
-uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"], key="file_uploader")
+uploaded_file = st.file_uploader("Upload your CSV or Excel file", type=["csv", "xlsx", "xls"], key="file_uploader")
 
 # Handle file change
 def get_file_id(file):
@@ -636,7 +642,7 @@ if uploaded_file:
                         sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f", ax=ax)
                         st.pyplot(fig)
                     if st.session_state.temp_viz['chart_type'] != "Heatmap":
-                        st.plotly_chart(fig, use_container_width=True)
+                        st.plotly_chart(fig, use_container_width=True, key=f"temp_viz_{st.session_state.temp_viz['chart_type']}_{st.session_state.temp_viz.get('x_axis','')}_{st.session_state.temp_viz.get('y_axis','')}")
                 except Exception as e:
                     st.error(f"Error generating visualization: {str(e)}")
 
@@ -682,7 +688,8 @@ if uploaded_file:
 
         visualizations = st.session_state.default_visualizations if st.session_state.dashboard_mode == "Default Dashboard" else st.session_state.custom_visualizations
 
-        st.write(f"Debug: Displaying {st.session_state.dashboard_mode} with {len(visualizations)} visualizations")
+        # Debug line removed for production
+        # st.write(f"Debug: Displaying {st.session_state.dashboard_mode} with {len(visualizations)} visualizations")
 
         filter_mode = st.radio(
             "Filter Mode",
@@ -691,7 +698,8 @@ if uploaded_file:
             key="filter_mode"
             )
         st.session_state.selected_filter_mode = filter_mode
-
+        
+        
         if filter_mode == "Global Dashboard Filters":
             with st.sidebar.expander("Global Dashboard Filters", expanded=True):
                 dashboard_categorical_filters = {}
@@ -819,7 +827,7 @@ if uploaded_file:
                                 sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f", ax=ax)
                                 st.pyplot(fig)
                             if viz['chart_type'] != "Heatmap":
-                                st.plotly_chart(fig, use_container_width=True)
+                                st.plotly_chart(fig, use_container_width=True, key=f"dashboard_viz_{viz['id']}")
                         except Exception as e:
                             st.error(f"Error generating visualization {i+1}: {str(e)}")
 
