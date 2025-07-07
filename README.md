@@ -45,7 +45,7 @@ dynamic-data-dashboard/
 ├── app.py              # Main Streamlit application
 ├── requirements.txt    # Python dependencies
 ├── README.md           # This file
-└── sample.csv          # (Optional) Sample dataset for testing
+└── sample_dataset1.csv          # (Optional) Sample dataset for testing
 ```
 
 ---
@@ -56,7 +56,7 @@ dynamic-data-dashboard/
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/dynamic-data-dashboard.git
+   git clone https://github.com/Akshith2112/dynamic-data-dashboard.git
    cd dynamic-data-dashboard
    ```
 
@@ -78,14 +78,7 @@ dynamic-data-dashboard/
 
 5. Open your browser at `http://localhost:8501`.
 
-### 🌐 Deploy on Streamlit Cloud
 
-1. Push the repository to GitHub.
-2. Go to [Streamlit Community Cloud](https://share.streamlit.io).
-3. Connect your GitHub account, select the repository, and choose `app.py` as the main file.
-4. Deploy, and your app will be live!
-
----
 
 ## 📝 Requirements
 
@@ -100,6 +93,9 @@ matplotlib==3.7.1
 numpy==1.24.3
 statsmodels==0.14.0
 pillow==10.0.0
+openpyxl==3.1.2
+xlrd==2.0.1
+scipy==1.10.0
 ```
 
 Install them using:
@@ -141,13 +137,21 @@ Upload this file via the app’s file uploader to explore its features.
 
 ---
 
-## 🙌 Credits
+## 👨‍💻 Developed By
 
-Built with ❤️ using Streamlit, Pandas, and Plotly.  
-Developed by [Your Name] – contributions and forks are welcome!
+**Akshith Boini**  
+🔗 [LinkedIn](https://www.linkedin.com/in/akshith-boini-89693b298)  
+📦 [GitHub](https://github.com/Akshith2112)
 
 ---
 
 ## 📜 License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## 💡 Future Improvements
+
+- Add NLP summary generation for insights  
+- Export full PDF report  
+- Cloud deployment (Streamlit Cloud, Render, etc.)  
+- User authentication & session history  
